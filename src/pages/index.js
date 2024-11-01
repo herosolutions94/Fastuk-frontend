@@ -1,10 +1,59 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Testimonials from "../../components/testimonials";
+import http from "../../helpers/http";
+import Text from "../../components/text";
+import { cmsFileUrl } from "../../helpers/helpers";
+
+
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("home")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
 
 
 
-export default function Home() {
+export default function Home({result}) {
+  console.log(result)
+  const {content, testimonials, siteSettings}=result
+  const data = content
+  ? [
+    { number: content.sec1_number_0, heading: content.sec1_heading_0, image: content.sec1_image_0  },
+    { number: content.sec1_number_1, heading: content.sec1_heading_1, image: content.sec1_image_1  },
+    { number: content.sec1_number_2, heading: content.sec1_heading_2, image: content.sec1_image_2  },
+    { number: content.sec1_number_3, heading: content.sec1_heading_3, image: content.sec1_image_3  },
+  ]
+  :[];
+  const data1 = [
+    { text: content.sec2_text_0, heading: content.sec2_heading_0, image: content.sec2_image_0  },
+    { text: content.sec2_text_1, heading: content.sec2_heading_1, image: content.sec2_image_1  },
+    { text: content.sec2_text_2, heading: content.sec2_heading_2, image: content.sec2_image_2  },
+    { text: content.sec2_text_3, heading: content.sec2_heading_3, image: content.sec2_image_3  },
+  ];
+  const data2 = [
+    { text: content.sec5_text_0, heading: content.sec5_heading_0, image: content.sec5_image_0  },
+    { text: content.sec5_text_1, heading: content.sec5_heading_1, image: content.sec5_image_1  },
+    { text: content.sec5_text_2, heading: content.sec5_heading_2, image: content.sec5_image_2  },
+    { text: content.sec5_text_3, heading: content.sec5_heading_3, image: content.sec5_image_3  },
+  ];
+  const data3 = [
+    { text: content.sec6_text_0, heading: content.sec6_heading_0, image: content.sec6_image_0  },
+    { text: content.sec6_text_1, heading: content.sec6_heading_1, image: content.sec6_image_1  },
+    { text: content.sec6_text_2, heading: content.sec6_heading_2, image: content.sec6_image_2  },
+    { text: content.sec6_text_3, heading: content.sec6_heading_3, image: content.sec6_image_3  },
+  ];
+  const data4 = [
+    { text: content.sec7_text_0, heading: content.sec7_heading_0, image: content.sec7_image_0  },
+    { text: content.sec7_text_1, heading: content.sec7_heading_1, image: content.sec7_image_1  },
+    { text: content.sec7_text_2, heading: content.sec7_heading_2, image: content.sec7_image_2  },
+    { text: content.sec7_text_3, heading: content.sec7_heading_3, image: content.sec7_image_3  },
+  ];
+
+
   return (
     <>
       <main>
@@ -12,12 +61,7 @@ export default function Home() {
           <div className="contain">
             <div className="flex">
               <div className="col col1">
-                <h1>We are a UK based top Movers company</h1>
-                <p>
-                  Moving services can significantly reduce the stress of
-                  relocating, allowing you to focus on settling into your new
-                  home.
-                </p>
+              <Text string={content.description1} />
                 <div className="search_tab">
                   <div className="tabs_top">
                     <button class="tab_btn active" type="button">
@@ -67,7 +111,7 @@ export default function Home() {
               </div>
               <div className="col col2">
                 <div className="image">
-                  <img src="/images/banner.png" />
+                  <img src={cmsFileUrl(content.image1)} />
                 </div>
               </div>
             </div>
@@ -77,50 +121,22 @@ export default function Home() {
         <section id="counter" className="bluebg">
           <div className="contain">
             <div className="flex">
-              <div className="coll">
+            {data.map((item, index) => (
+
+              <div className="coll" key={index}>
                 <div className="inner">
                   <div className="icon">
-                    <img src="/images/c1.png" />
+                    <img src={cmsFileUrl(item.image)} />
                   </div>
                   <div className="text">
-                    <h3>543</h3>
-                    <p>Consulting Success</p>
+                    <h3>{item.number}</h3>
+                    <p>{item.heading}</p>
                   </div>
                 </div>
               </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="icon">
-                    <img src="/images/c2.png" />
-                  </div>
-                  <div className="text">
-                    <h3>612</h3>
-                    <p>Financial Consulting</p>
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="icon">
-                    <img src="/images/c3.png" />
-                  </div>
-                  <div className="text">
-                    <h3>356</h3>
-                    <p>Market Research</p>
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="icon">
-                    <img src="/images/c4.png" />
-                  </div>
-                  <div className="text">
-                    <h3>287</h3>
-                    <p>Happy Client</p>
-                  </div>
-                </div>
-              </div>
+                        ))}
+
+              
             </div>
           </div>
         </section>
@@ -128,58 +144,25 @@ export default function Home() {
         <section id="company">
           <div className="contain">
             <div className="content_center">
-              <div className="title">OUR COMPANY</div>
-              <h2>We are experienced work lovers focused on quality</h2>
+              <Text string={content.description2}/>
             </div>
             <div className="flex">
+              {data1.map((item, index) => (
+
               <div className="coll">
                 <div className="inner">
-                  <h4>Corporate Location</h4>
+                  <h4>{item.heading}</h4>
                   <p>
-                    Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                    elit,sed do.
+                    {item.text}
                   </p>
                   <div className="icon">
-                    <img src="/images/crane1.png" />
+                    <img src={cmsFileUrl(item.image)} />
                   </div>
                 </div>
               </div>
-              <div className="coll">
-                <div className="inner">
-                  <h4>Door to Door Service</h4>
-                  <p>
-                    Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                    elit,sed do.
-                  </p>
-                  <div className="icon">
-                    <img src="/images/crane2.png" />
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <h4>Warehousing & Storage</h4>
-                  <p>
-                    Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                    elit,sed do.
-                  </p>
-                  <div className="icon">
-                    <img src="/images/crane3.png" />
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <h4>Transportation Servcie</h4>
-                  <p>
-                    Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                    elit,sed do.
-                  </p>
-                  <div className="icon">
-                    <img src="/images/crane4.png" />
-                  </div>
-                </div>
-              </div>
+                            ))}
+
+              
             </div>
           </div>
         </section>
@@ -189,26 +172,15 @@ export default function Home() {
             <div className="flex">
               <div className="col col1">
                 <div className="image">
-                  <img src="/images/about.png" />
+                  <img src={cmsFileUrl(content.image10)} />
                 </div>
               </div>
               <div className="col col2">
-                <div className="title">About Us </div>
-                <h2>Welcome Worldwide Best Transport Company</h2>
+              <Text string={content.description3}/>
 
-                <p>
-                  Competently implement efficient e-commerce without cross-unit
-                  growth strategies.
-                </p>
-                <ul>
-                  <li>Unlimited Revisions</li>
-                  <li>Best Solutions</li>
-                  <li>Best Fitness Excercise</li>
-                  <li>Combine Fitness and</li>
-                </ul>
                 <div className="btn_blk">
-                  <Link href="" className="site_btn color">
-                    About More
+                  <Link href={content.link_url1} className="site_btn color">
+                    {content.link_text1}
                   </Link>
                 </div>
               </div>
@@ -220,9 +192,9 @@ export default function Home() {
           <div className="contain">
             <div className="content_center">
               <div className="icon">
-                <img src="/images/play.png" />
+                <img src={"/images/play.png"} />
               </div>
-              <h2>Fast And Reliable Moving Solutions Managers Since 1989</h2>
+              <h2><Text string={content.description4}/></h2>
             </div>
           </div>
         </section>
@@ -231,66 +203,32 @@ export default function Home() {
           <div className="contain">
             <div className="flex">
               <div className="col col1">
-                <div className="title">why people choose us?</div>
-                <h2>
-                  We have 25+ years of experiences give you better results.
-                </h2>
+              <Text string={content.description5}/>
                 <div className="btn_blk">
-                  <Link href="" className="site_btn color">
-                    Read More
+                  <Link href={content.link_url2} className="site_btn color">
+                  {content.link_text2}
                   </Link>
                 </div>
               </div>
               <div className="col col2">
                 <ul>
-                  <li>
+                  {data2.map((item,index) => (
+                    <li>
                     <div className="head">
                       <div className="icon">
-                        <img src="/images/earth1.png" />
+                        <img src={cmsFileUrl(item.image)} />
                       </div>
-                      <h4>Economical Air Freight</h4>
+                      <h4>{item.heading}</h4>
                     </div>
                     <p>
-                      Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                      elit,sed do.
+                    {item.text}
                     </p>
                   </li>
-                  <li>
-                    <div className="head">
-                      <div className="icon">
-                        <img src="/images/crane2.png" />
-                      </div>
-                      <h4>Same day Delivery</h4>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                      elit,sed do.
-                    </p>
-                  </li>
-                  <li>
-                    <div className="head">
-                      <div className="icon">
-                        <img src="/images/earth2.png" />
-                      </div>
-                      <h4>Time Bound deliveries</h4>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                      elit,sed do.
-                    </p>
-                  </li>
-                  <li>
-                    <div className="head">
-                      <div className="icon">
-                        <img src="/images/crane1.png" />
-                      </div>
-                      <h4>Multi-modal Transport</h4>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet,con sec tetur adipisicing
-                      elit,sed do.
-                    </p>
-                  </li>
+
+                  ))}
+                  
+
+                  
                 </ul>
               </div>
             </div>
@@ -300,54 +238,22 @@ export default function Home() {
         <section id="c_points">
           <div className="contain">
             <div className="flex">
-              <div className="coll">
+              {data3.map((item, index) => (
+                <div className="coll">
                 <div className="inner">
                   <div className="icon">
-                    <img src="/images/cp1.png" />
+                    <img src={cmsFileUrl(item.image)} />
                   </div>
-                  <h4>Free Estimate</h4>
+                  <h4>{item.heading}</h4>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                    elit tellu.
+                  {item.text}
                   </p>
                 </div>
               </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="icon">
-                    <img src="/images/cp2.png" />
-                  </div>
-                  <h4>Packaging</h4>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                    elit tellu.
-                  </p>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="icon">
-                    <img src="/images/cp3.png" />
-                  </div>
-                  <h4>Moving Protection</h4>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                    elit tellu.
-                  </p>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="icon">
-                    <img src="/images/cp4.png" />
-                  </div>
-                  <h4>Contact Office</h4>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                    elit tellu.
-                  </p>
-                </div>
-              </div>
+
+              ))}
+              
+              
             </div>
           </div>
         </section>
@@ -355,79 +261,37 @@ export default function Home() {
         <section id="work">
           <div className="contain">
             <div className="heading">
-              <div className="title">How It Works?</div>
-              <h2>How We Deliver Your Parcel</h2>
+              <Text string={content.description6}/>
             </div>
             <div className="flex">
               <div className="col">
-                <div className="inner">
+                {data4.map((item, index) => (
+                  <div className="inner">
                   <div className="icon">
-                    <img src="/images/verify 5.svg" />
+                    <img src={cmsFileUrl(item.image)} />
                   </div>
                   <div className="text">
-                    <h4>Parcel Register</h4>
+                    <h4>{item.heading}</h4>
                     <p>
-                      One of the key components of best logistics solutions
-                      industy
+                      {item.text}
                     </p>
                   </div>
                 </div>
-                <div className="inner">
-                  <div className="ll1">
-                    <img src="/images/line.svg" alt="" />
-                  </div>
-                  <div className="icon">
-                    <img src="/images/verify 6.svg" />
-                  </div>
-                  <div className="text">
-                    <h4>Parcel Loading</h4>
-                    <p>
-                      One of the key components of best logistics solutions
-                      industy
-                    </p>
-                  </div>
-                </div>
-                <div className="inner">
-                  <div className="ll1">
-                    <img src="/images/line.svg" alt="" />
-                  </div>
-                  <div className="icon">
-                    <img src="/images/verify 7.svg" />
-                  </div>
-                  <div className="text">
-                    <h4>Parcel In-transit</h4>
-                    <p>
-                      One of the key components of best logistics solutions
-                      industry
-                    </p>
-                  </div>
-                </div>
-                <div className="inner">
-                <div className="ll1">
-                    <img src="/images/line.svg" alt="" />
-                  </div>
-                  <div className="icon">
-                    <img src="/images/verify 8.svg" />
-                  </div>
-                  <div className="text">
-                    <h4>Parcel Delivery</h4>
-                    <p>
-                      One of the key components of best logistics solutions
-                      industy
-                    </p>
-                  </div>
-                </div>
+
+                ))}
+                
+                
               </div>
               <div className="colr">
                 <div className="image">
-                  <img src="/images/work.png" />
+                  <img src={cmsFileUrl(content.image20)} />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <Testimonials />
+        <Testimonials testimonials = {testimonials} content = {content} />
       </main>
     </>
   );

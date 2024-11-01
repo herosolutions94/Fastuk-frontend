@@ -4,9 +4,24 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import dynamic from "next/dynamic";
+import http from "../helpers/http";
+import Text from "../components/text";
+
+import { cmsFileUrl } from "../helpers/helpers";
 const OwlCarousel = dynamic(import("react-owl-carousel"), { ssr: false });
 
-export default function Testimonials() {
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("home")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Testimonials({testimonials, content}) {
+  console.log(testimonials)
+
   const testiSlider = {
     autoplay: true,
     loop: true,
@@ -42,157 +57,37 @@ export default function Testimonials() {
       <section id="testimonial">
         <div className="contain">
           <div className="content_center">
-            <div className="title">TESTIMONIALS</div>
-            <h2>What Our Clients Say</h2>
-            <p>Meet the agents who will assist you</p>
+            <Text string={content.description7}/>
           </div>
         
       <OwlCarousel {...testiSlider}>
+        {testimonials?.map((testimonial,index) => (
         <div className="item">
-          <div className="inner">
-            <div className="star">
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
+        <div className="inner">
+          <div className="star">
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+          </div>
+          <p>
+           <Text string={testimonial.description} />
+          </p>
+          <div className="profile">
+            <div className="image">
+              <img src={cmsFileUrl(testimonial.testi_image)} alt=""/>
             </div>
-            <p>
-              .. followed by some bogus content. Aenean commodo ligula egget
-              dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus.
-            </p>
-            <div className="profile">
-              <div className="image">
-                <img src="images/p1.svg" alt="" />
-              </div>
-              <div className="text">
-                <h5>Jack Albert</h5>
-                <h6>CEO SoftTechit</h6>
-              </div>
+            <div className="text">
+              <h5>{testimonial.title}</h5>
+              <h6>{testimonial.designation}</h6>
             </div>
           </div>
         </div>
-        <div className="item">
-          <div className="inner">
-            <div className="star">
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-            </div>
-            <p>
-              .. followed by some bogus content. Aenean commodo ligula egget
-              dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus.
-            </p>
-            <div className="profile">
-              <div className="image">
-                <img src="images/p1.svg" alt="" />
-              </div>
-              <div className="text">
-                <h5>Jack Albert</h5>
-                <h6>CEO SoftTechit</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="item">
-          <div className="inner">
-            <div className="star">
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-            </div>
-            <p>
-              .. followed by some bogus content. Aenean commodo ligula egget
-              dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus.
-            </p>
-            <div className="profile">
-              <div className="image">
-                <img src="images/p1.svg" alt="" />
-              </div>
-              <div className="text">
-                <h5>Jack Albert</h5>
-                <h6>CEO SoftTechit</h6>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
 
-        <div className="item">
-          <div className="inner">
-            <div className="star">
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-            </div>
-            <p>
-              .. followed by some bogus content. Aenean commodo ligula egget
-              dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus.
-            </p>
-            <div className="profile">
-              <div className="image">
-                <img src="images/p1.svg" alt="" />
-              </div>
-              <div className="text">
-                <h5>Jack Albert</h5>
-                <h6>CEO SoftTechit</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="item">
-          <div className="inner">
-            <div className="star">
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-            </div>
-            <p>
-              .. followed by some bogus content. Aenean commodo ligula egget
-              dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus.
-            </p>
-            <div className="profile">
-              <div className="image">
-                <img src="images/p1.svg" alt="" />
-              </div>
-              <div className="text">
-                <h5>Jack Albert</h5>
-                <h6>CEO SoftTechit</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="item">
-          <div className="inner">
-            <div className="star">
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-            </div>
-            <p>
-              .. followed by some bogus content. Aenean commodo ligula egget
-              dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus.
-            </p>
-            <div className="profile">
-              <div className="image">
-                <img src="images/p1.svg" alt="" />
-              </div>
-              <div className="text">
-                <h5>Jack Albert</h5>
-                <h6>CEO SoftTechit</h6>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
+        
+        
     
       </OwlCarousel>
 

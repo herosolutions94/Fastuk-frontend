@@ -1,7 +1,21 @@
 import React from "react";
 import Link from "next/link";
+import http from "../../helpers/http";
+import Text from "../../components/text";
 
-export default function Login() {
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("login")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Login({result}) {
+  console.log(result)
+  const {content, faqs, siteSettings} = result
+
   return (
     <div>
         <div className="contain">
@@ -22,8 +36,7 @@ export default function Login() {
         <section id="login">
           <div className="contain">
             <div className="outer">
-              <h3>Welcome back!</h3>
-              <p>Let's get you some health tips today.</p>
+              <Text string = {content.description1}/>
 
               <form>
                 <div className="form_blk">

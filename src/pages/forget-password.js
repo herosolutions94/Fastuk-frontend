@@ -1,7 +1,21 @@
 import React from "react";
 import Link from "next/link";
+import http from "../../helpers/http";
+import Text from "../../components/text";
 
-export default function Forget_password() {
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("forget-password")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Forget_password({result}) {
+  console.log(result)
+  const {content, siteSettings} = result
+
   return (
     <div>
  
@@ -23,8 +37,7 @@ export default function Forget_password() {
         <section id="login">
           <div className="contain">
             <div className="outer">
-              <h3>Forgot Password?</h3>
-              <p>Enter your email address associated with your account</p>
+              <Text string={content.description1}/>
 
               <form>
                 <div className="form_blk">

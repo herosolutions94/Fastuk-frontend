@@ -1,7 +1,33 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import TeamMembers from "../../components/team-members";
+import Text from "../../components/text";
 
-export default function About() {
+
+import http from "../../helpers/http";
+import { cmsFileUrl } from "../../helpers/helpers";
+
+
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("about")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function About({result}) {
+  const {content, teamMembers, siteSettings}=result
+  const data = [
+    { number: content.sec4_number_0, heading: content.sec4_heading_0, image: content.sec4_abt_image_0  },
+    { number: content.sec4_number_1, heading: content.sec4_heading_1, image: content.sec4_abt_image_1  },
+    { number: content.sec4_number_2, heading: content.sec4_heading_2, image: content.sec4_abt_image_2  },
+    { number: content.sec4_number_3, heading: content.sec4_heading_3, image: content.sec4_abt_image_3  },
+  ];
+
+
+  console.log(result)
   return (
     <>
       <main>
@@ -10,21 +36,14 @@ export default function About() {
             <div className="flex">
               <div className="col col1">
                 <div className="image">
-                  <img src="/images/who.png" />
+                <img src={cmsFileUrl(content.abt_image1)} />
                 </div>
               </div>
               <div className="col">
-                <div className="title">Who we are</div>
-                <h2>Digital & Trusted Transport Logistics Company</h2>
-                <p>
-                  Nulla vitae ex nunc Morbi quis purus convallis fermentum metus
-                  volutpat sodales purus Nunc quis mauris et eros vulputate
-                  mattis Nulla vitae ex nunc Mor bi quis the purus convallis
-                  fermentum metus volutpat
-                </p>
+                <Text string = {content.description1}/>
                 <div className="btn_blk">
-                  <Link href="" className="site_btn color">
-                    About More
+                  <Link href={content.link_url1} className="site_btn color">
+                    {content.link_text1}
                   </Link>
                 </div>
               </div>
@@ -36,140 +55,33 @@ export default function About() {
           <div className="contain">
             <div className="flex">
               <div className="col col1">
-                <h2>We give you complete control of your any type shipment.</h2>
-                <p>
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                  The point of using Lorem Ipsum is that it has a more-or-less
-                  normal distribution.
-                </p>
+              <Text string ={content.description2} />
                 <div className="box">
-                  <img src="/images/box.png"></img>
+                  <img src={cmsFileUrl(content.abt_image2)}></img>
                   <p>
-                    We Create A Honest, Hassle-Free And Quality Moving
-                    Experience
+                    {content.text}
                   </p>
                 </div>
               </div>
               <div className="col col2">
                 <div className="image">
-                  <img src="/images/shipment.png" />
+                  <img src={cmsFileUrl(content.abt_image3)} />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="team">
-          <div className="contain">
-            <div className="content_center">
-              <div className="title">Professionals</div>
-              <h2>Our Expert Teams</h2>
-              <p>
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-              </p>
-            </div>
-            <div className="flex">
-              <div className="coll">
-                <div className="inner">
-                  <div className="image">
-                    <img src="/images/t1.png" />
-                  </div>
-                  <div className="text">
-                    <h4>Harry Mok</h4>
-                    <p>Main Supervisor</p>
-                  </div>
-                  <div className="share">
-                    <div className="social">
-                      <img src="/images/li.svg" />
-                      <img src="/images/in.svg" />
-                      <img src="/images/fb.svg" />
-                    </div>
-                    <div className="social">
-                      <img src="/images/ph.svg" />
-                      <img src="/images/en.svg" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="image">
-                    <img src="/images/t2.png" />
-                  </div>
-                  <div className="text">
-                    <h4>Harry Mok</h4>
-                    <p>Main Supervisor</p>
-                  </div>
-                  <div className="share">
-                    <div className="social">
-                      <img src="/images/li.svg" />
-                      <img src="/images/in.svg" />
-                      <img src="/images/fb.svg" />
-                    </div>
-                    <div className="social">
-                      <img src="/images/ph.svg" />
-                      <img src="/images/en.svg" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="image">
-                    <img src="/images/t3.png" />
-                  </div>
-                  <div className="text">
-                    <h4>Harry Mok</h4>
-                    <p>Main Supervisor</p>
-                  </div>
-                  <div className="share">
-                    <div className="social">
-                      <img src="/images/li.svg" />
-                      <img src="/images/in.svg" />
-                      <img src="/images/fb.svg" />
-                    </div>
-                    <div className="social">
-                      <img src="/images/ph.svg" />
-                      <img src="/images/en.svg" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="coll">
-                <div className="inner">
-                  <div className="image">
-                    <img src="/images/t4.png" />
-                  </div>
-                  <div className="text">
-                    <h4>Harry Mok</h4>
-                    <p>Main Supervisor</p>
-                  </div>
-                  <div className="share">
-                    <div className="social">
-                      <img src="/images/li.svg" />
-                      <img src="/images/in.svg" />
-                      <img src="/images/fb.svg" />
-                    </div>
-                    <div className="social">
-                      <img src="/images/ph.svg" />
-                      <img src="/images/en.svg" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TeamMembers teamMembers = {teamMembers} content = {content} />
+
 
         <section id="bg">
           <div className="contain">
             <div className="content_center">
               <div className="icon">
-                <img src="/images/play.png" />
+                <img src={cmsFileUrl(content.abt_image4)} />
               </div>
-              <h2>Fast And Reliable Moving Solutions Managers Since 1989</h2>
+              <Text string ={content.description4} />
             </div>
           </div>
         </section>
@@ -179,47 +91,25 @@ export default function About() {
             <div className="flex">
               <div className="col col1">
                 <div className="image">
-                  <img src="/images/counts.png" />
+                  <img src={cmsFileUrl(content.abt_image5)} />
                 </div>
               </div>
               <div className="col">
                 <div className="flex">
-                  <div className="coll">
+                  {data.map((item, index) => (
+                    <div className="coll" key={index}>
                     <div className="inner">
                       <div className="icon">
-                        <img src="/images/count1.png" />
+                        <img src={cmsFileUrl(item.image)} />
                       </div>
-                      <h3>10K</h3>
-                      <h5>Projects Completed</h5>
+                      <h3>{item.number}</h3>
+                      <h5>{item.heading}</h5>
                     </div>
                   </div>
-                  <div className="coll">
-                    <div className="inner">
-                      <div className="icon">
-                        <img src="/images/count2.png" />
-                      </div>
-                      <h3>240+</h3>
-                      <h5>Projects Completed</h5>
-                    </div>
-                  </div>
-                  <div className="coll">
-                    <div className="inner">
-                      <div className="icon">
-                        <img src="/images/count3.png" />
-                      </div>
-                      <h3>8K</h3>
-                      <h5>Projects Completed</h5>
-                    </div>
-                  </div>
-                  <div className="coll">
-                    <div className="inner">
-                      <div className="icon">
-                        <img src="/images/count4.png" />
-                      </div>
-                      <h3>80+</h3>
-                      <h5>Projects Completed</h5>
-                    </div>
-                  </div>
+
+                  ))}
+                  
+                  
                 </div>
               </div>
             </div>
@@ -230,22 +120,16 @@ export default function About() {
         <div className="contain">
           <div className="flex">
             <div className="col col1">
-              <div className="title">Who we are</div>
-              <h2>Benefits for using our services</h2>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</li>
-                <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</li>
-                <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</li>
-              </ul>
+            <Text string = {content.description5} />
               <div className="btn_blk">
-                  <Link href="" className="site_btn color">
-                    About More
+                  <Link href={content.link_url2} className="site_btn color">
+                  {content.link_text2}
                   </Link>
                 </div>
             </div>
             <div className="col col2">
               <div className="image">
-            <img src="/images/benefit.png" />
+            <img src={cmsFileUrl(content.abt_image10)} />
               </div>
             </div>
           </div>

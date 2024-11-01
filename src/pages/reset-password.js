@@ -1,7 +1,23 @@
 import React from "react";
 import Link from "next/link";
+import http from "../../helpers/http";
+import Text from "../../components/text";
 
-export default function Reset_password() {
+
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("reset-password")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+
+export default function Reset_password({result}) {
+  console.log(result)
+  const {content, siteSettings}=result
+
   return (
     <div>
      
@@ -23,7 +39,7 @@ export default function Reset_password() {
         <section id="login">
           <div className="contain">
             <div className="outer">
-              <h3>Rest your Password</h3>
+              <h3><Text string={content.description1}/></h3>
 
               <form>
                 <div className="form_blk">

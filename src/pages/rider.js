@@ -1,6 +1,35 @@
 import React from 'react'
+import http from "../../helpers/http";
+import Text from "../../components/text";
+import { cmsFileUrl } from "../../helpers/helpers";
 
-export default function Rider() {
+
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("rider")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Rider({result}) {
+    console.log(result)
+    const {content, siteSettings}=result
+    const data = [
+        { text: content.sec3_text_0, image: content.sec3_rider_image_0  },
+        { text: content.sec3_text_1, image: content.sec3_rider_image_1  },
+        { text: content.sec3_text_2, image: content.sec3_rider_image_2  },
+        { text: content.sec3_text_3, image: content.sec3_rider_image_3  },
+      ];
+
+      const data1 = [
+        { text: content.sec4_text_0, image: content.sec4_rider_image_0  },
+        { text: content.sec4_text_1, image: content.sec4_rider_image_1  },
+        { text: content.sec4_text_2, image: content.sec4_rider_image_2  },
+        { text: content.sec4_text_3, image: content.sec4_rider_image_3  },
+      ];
+
   return (
     <div>
         <main>
@@ -9,13 +38,11 @@ export default function Rider() {
                     <div className='flex'>
                         <div className='col col1'>
                             <div className='image'>
-                            <img src="/images/rider.png" />
+                            <img src={cmsFileUrl(content.rider_image1)} />
                             </div>
                         </div>
                         <div className='col col2'>
-                            <div className='title'>Become a Rider</div>
-                            <h2>Why Ride with Us?</h2>
-                            <p>Discover the freedom and benefits of joining our rider community. Enjoy flexible schedules, competitive pay, and the opportunity to explore your city while delivering packages. Whether you’re looking for full-time work or a way to earn extra income in your spare time, we have a place for you.</p>
+                            <Text string={content.description1} />
                         </div>
                     </div>
                 </div>
@@ -24,36 +51,17 @@ export default function Rider() {
             <section id="choose1">
             <div className="contain">
                 <div className="content_center">
-                    <div className="title">CHOOSE</div>
-                    <h2>Rider Requirements</h2>
-                    <p>To join our team, make sure you meet these basic requirements</p>
+                <Text string={content.description2} />                    
                 </div>
                 <div className="outer">
+                {content.sec_text && content.sec_text.map((item, index) => (
+
                     <div className="coll">
                         <div className="inner">
-                        Valid driving license
+                        {item}
                         </div>
                     </div>
-                    <div className="coll">
-                        <div className="inner">
-                        Reliable transportation
-                        </div>
-                    </div>
-                    <div className="coll">
-                        <div className="inner">
-                        Smartphone with internet access
-                        </div>
-                    </div>
-                    <div className="coll">
-                        <div className="inner">
-                        Good knowledge of local roads
-                        </div>
-                    </div>
-                    <div className="coll">
-                        <div className="inner">
-                        Safety practices
-                        </div>
-                    </div>
+                ))}
                 </div>
             </div>
         </section>
@@ -61,13 +69,11 @@ export default function Rider() {
                 <div className='contain'>
                     <div className='flex'>
                     <div className='col col1 '>
-                            <div className='title'>Become a Rider</div>
-                            <h2>Why Ride with Us?</h2>
-                            <p>Discover the freedom and benefits of joining our rider community. Enjoy flexible schedules, competitive pay, and the opportunity to explore your city while delivering packages. Whether you’re looking for full-time work or a way to earn extra income in your spare time, we have a place for you.</p>
+                            <Text string={content.description3} />
                         </div>
                         <div className='col col2'>
                             <div className='image'>
-                            <img src="/images/rider2.png" />
+                            <img src= {cmsFileUrl(content.rider_image2)} />
                             </div>
                         </div>
                       
@@ -78,42 +84,23 @@ export default function Rider() {
         <section id="perks">
             <div className='contain'>
                 <div className='content_center'>
-                    <h2>Rider Perks & Benefits</h2>
-                    <p>We believe in taking care of our riders, which is why we offer exclusive benefits</p>
+                <Text string={content.description4} />
+
                 </div>
                 <div className='flex'>
-                    <div className='coll'>
+                    {data.map((item, index) => (
+                        <div className='coll'>
                         <div className='inner'>
                             <div className='icon'>
-                                <img src="/images/discount.png"/>
+                                <img src={cmsFileUrl(item.image)}/>
                             </div>
-                            <p>Discounts on fuel and vehicle maintenance.</p>
+                            <p>{item.text}</p>
                         </div>
                     </div>
-                    <div className='coll'>
-                        <div className='inner'>
-                            <div className='icon'>
-                                <img src="/images/insurance.png"/>
-                            </div>
-                            <p>Access to affordable insurance options and safety gear</p>
-                        </div>
-                    </div>
-                    <div className='coll'>
-                        <div className='inner'>
-                            <div className='icon'>
-                                <img src="/images/badge.png"/>
-                            </div>
-                            <p>Special rewards programs for consistent performance</p>
-                        </div>
-                    </div>
-                    <div className='coll'>
-                        <div className='inner'>
-                            <div className='icon'>
-                                <img src="/images/opportunity.png"/>
-                            </div>
-                            <p>Opportunity to grow within our company</p>
-                        </div>
-                    </div>
+
+                    ))}
+                    
+                    
                 </div>
             </div>
         </section>
@@ -122,41 +109,18 @@ export default function Rider() {
             <div className="contain">
                 <div className="outer">
                     <div className="text">
-                        <div className="title">WHY FASTUK</div>
-                        <h2>Our Riders Safety First</h2>
+                        <Text string={content.description5} />
                         <div className="flex">
-                            <div className="coll">
-                                <div className="inner">
-                                    <div className="icon">
-                                        <img src="/images/tt1.png" alt="" />
-                                    </div>
-                                    <h4>Emphasize Expertise</h4>
-                                </div>
-                            </div>
-                            <div className="coll">
-                                <div className="inner">
-                                    <div className="icon">
-                                        <img src="/images/tt2.png" alt="" />
-                                    </div>
-                                    <h4>Stress-Free Experience</h4>
-                                </div>
-                            </div>
-                            <div className="coll">
-                                <div className="inner">
-                                    <div className="icon">
-                                        <img src="/images/tt3.png" alt="" />
-                                    </div>
-                                    <h4>Personalized Solutions</h4>
-                                </div>
-                            </div>
-                            <div className="coll">
-                                <div className="inner">
-                                    <div className="icon">
-                                        <img src="/images/tt4.png" alt="" />
-                                    </div>
-                                    <h4>Unbeatable Value</h4>
-                                </div>
-                            </div>
+                            {data1.map((item, index) => (
+                                 <div className="coll" key={index}>
+                                 <div className="inner">
+                                     <div className="icon">
+                                         <img src={cmsFileUrl(item.image)} alt="" />
+                                     </div>
+                                     <h4>{item.text}</h4>
+                                 </div>
+                             </div>
+                            ))}                                                     
                         </div>
                     </div>
                 </div>

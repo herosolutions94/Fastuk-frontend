@@ -1,7 +1,36 @@
 import Link from "next/link";
 import React from "react";
+import http from "../../helpers/http";
+import Text from "../../components/text";
+import { cmsFileUrl } from "../../helpers/helpers";
 
-export default function Business() {
+
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("business")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Business({result}) {
+  console.log(result)
+  const {content, siteSettings}=result
+  const data = [
+    { text: content.sec1_text_0, heading: content.sec1_heading_0, image: content.sec1_business_image_0  },
+    { text: content.sec1_text_1, heading: content.sec1_heading_1, image: content.sec1_business_image_1  },
+    { text: content.sec1_text_2, heading: content.sec1_heading_2, image: content.sec1_business_image_2  },
+    { text: content.sec1_text_3, heading: content.sec1_heading_3, image: content.sec1_business_image_3  },
+  ];
+
+  const data1 = [
+    { text: content.sec3_text_0, image: content.sec3_business_image_0  },
+    { text: content.sec3_text_1, image: content.sec3_business_image_1  },
+    { text: content.sec3_text_2, image: content.sec3_business_image_2  },
+    { text: content.sec3_text_3, image: content.sec3_business_image_3  },
+  ];
+
   return (
     <div>
       <main>
@@ -9,26 +38,16 @@ export default function Business() {
           <div className="contain">
             <div className="flex">
               <div className="col col1 ">
-                <div className="title">For Businesses</div>
-                <h2>
-                  Business Solutions - Delivering Excellence for Your Business
-                </h2>
-                <p>
-                  We understand that every business is unique. That’s why we
-                  offer customized shipping solutions to meet your specific
-                  needs, whether you’re a small startup or a large enterprise.
-                  From bulk deliveries to urgent express services, we have the
-                  right plan for your business.
-                </p>
+                <Text string={content.description1} />
                 <div className="btn_blk">
-                  <Link href="" className="site_btn color">
-                    Get a Quote
+                  <Link href={content.link_url1} className="site_btn color">
+                    {content.link_text1}
                   </Link>
                 </div>
               </div>
               <div className="col col2">
                 <div className="image">
-                  <img src="/images/bu.png" />
+                  <img src={cmsFileUrl(content.business_image1)} />
                 </div>
               </div>
             </div>
@@ -40,62 +59,30 @@ export default function Business() {
             <div className="outer">
               <div className="head">
                 <div className="text">
-                  <div className="title">PROCESS</div>
-                  <h2>Our Process</h2>
+                  <Text string={content.heading1} />
+                  <h2><Text string={content.heading2} /></h2>
                 </div>
-                <Link href="" className="site_btn">
-                  Request a Consultation
+                <Link href={content.link_url2} className="site_btn">
+                {content.link_text2}
                 </Link>
               </div>
               <div className="flex">
-                <div className="coll">
+                {data.map((item, index) => (
+                  <div className="coll" key={index}>
                   <div className="inner">
                     <div className="icon">
-                      <img src="/images/image 60.png" alt="" />
+                      <img src={cmsFileUrl(item.image)} alt="" />
                     </div>
-                    <h4>Consultation</h4>
+                    <h4>{item.heading}</h4>
                     <p>
-                      We begin with a detailed consultation to understand your
-                      needs and vision.
+                      {item.text}
                     </p>
                   </div>
                 </div>
-                <div className="coll">
-                  <div className="inner">
-                    <div className="icon">
-                      <img src="/images/image 59.png" alt="" />
-                    </div>
-                    <h4>Design</h4>
-                    <p>
-                      Our design team creates a customized plan that brings your
-                      ideas to life.
-                    </p>
-                  </div>
-                </div>
-                <div className="coll">
-                  <div className="inner">
-                    <div className="icon">
-                      <img src="/images/image 58.png" alt="" />
-                    </div>
-                    <h4>Execution</h4>
-                    <p>
-                      Our skilled craftsmen execute the plan with precision and
-                      care.
-                    </p>
-                  </div>
-                </div>
-                <div className="coll">
-                  <div className="inner">
-                    <div className="icon">
-                      <img src="/images/image 61.png" alt="" />
-                    </div>
-                    <h4>Completion</h4>
-                    <p>
-                      We ensure everything meets your expectations and conduct a
-                      final walkthrough.
-                    </p>
-                  </div>
-                </div>
+
+                ))}
+                
+                
               </div>
             </div>
           </div>
@@ -110,12 +97,10 @@ export default function Business() {
                             </div>
                         </div>
                         <div className='col '>
-                            <div className='title'>PARTNERS</div>
-                            <h2>Exclusive Discounts & Rewards</h2>
-                            <p>Partner with us and enjoy exclusive discounts on bulk shipments, subscription plans, and seasonal offers. We reward your loyalty with benefits designed to save you time and money, so you can focus on what matters most—growing your business.</p>
+                            <Text string={content.description2}/>
                             <div className="btn_blk">
-                  <Link href="" className="site_btn color">
-                   Get a Quote
+                  <Link href={content.link_url3} className="site_btn color">
+                   {content.link_text3}
                   </Link>
                 </div>
                         </div>
@@ -126,55 +111,25 @@ export default function Business() {
             <section id="operations">
             <div className="contain">
                 <div className="content_center">
-                    <div className="title">OPERATIONS</div>
-                    <h2>Seamless Integration with Your Business Operations</h2>
+                    <Text string={content.description3}/>
                 
                 </div>
                 <div className="flex">
+                  {data1.map((item, index) => (
                     <div className="coll">
-                        <div className="inner">
-                            <div className="image">
-                                <img src="/images/o1.png" alt="" />
-                            </div>
-                            <div className="text">
-                                <h4>API & E-Commerce Integration</h4>
-                                <p>Easily connect your online store or business management software with our platform through our API. Automate order processing and shipping labels directly from your system.</p>
-                            </div>
+                    <div className="inner">
+                        <div className="image">
+                            <img src={cmsFileUrl(item.image)} alt="" />
+                        </div>
+                        <div className="text">
+                            <Text string={item.text}/>
                         </div>
                     </div>
-                    <div className="coll">
-                        <div className="inner">
-                            <div className="image">
-                                <img src="/images/o2.png" alt="" />
-                            </div>
-                            <div className="text">
-                                <h4>Automated Shipping & Label Generation</h4>
-                                <p>With our integration, you can automate the creation of shipping labels and invoices as soon as an order is placed. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="coll">
-                        <div className="inner">
-                            <div className="image">
-                                <img src="/images/o3.png" alt=""/>
-                            </div>
-                            <div className="text">
-                                <h4>Inventory & Order Management Synchronization</h4>
-                                <p>Keep your inventory and order statuses up to date with real-time synchronization.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="coll">
-                        <div className="inner">
-                            <div className="image">
-                                <img src="/images/o4.png" alt=""/>
-                            </div>
-                            <div className="text">
-                                <h4>Customizable Shipping Rules & Settings</h4>
-                                <p>Tailor your shipping preferences to match your business needs. Set custom rules based on order value, weight, or delivery location.</p>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+
+                  ))}
+                    
+                    
                 </div>
             </div>
         </section>
@@ -184,18 +139,17 @@ export default function Business() {
           <div className="contain">
             <div className="flex">
               <div className="col col1">
-              <h2>Real-Time Tracking & Transparency</h2>
-                    <p>Stay in control of your shipments with our advanced tracking system. Our platform provides real-time updates and full transparency, allowing you and your customers to track packages every step of the way.</p>
+                <Text string={content.description8}/>
                     <div className="btn_blk">
-                  <Link href="" className="site_btn">
-                    About More
+                  <Link href={content.link_url4} className="site_btn">
+                    {content.link_text4}
                   </Link>
                 </div>
           
               </div>
               <div className="col col2">
                 <div className="image">
-                  <img src="/images/st.png" />
+                  <img src={cmsFileUrl(content.business_image11)} />
                 </div>
               </div>
             </div>

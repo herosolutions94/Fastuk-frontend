@@ -1,7 +1,21 @@
 import React from "react";
 import Link from "next/link";
+import http from "../../helpers/http";
+import Text from "../../components/text";
 
-export default function Signup() {
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("signup")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Signup({result}) {
+  console.log(result)
+  const {content, siteSettings} = result
+
   return (
     <div>
 
@@ -23,8 +37,7 @@ export default function Signup() {
         <section id="login">
           <div className="contain">
             <div className="outer">
-              <h3>Join us today</h3>
-              <p>Let's get started today.</p>
+              <Text string={content.description1} />
 
               <form>
                 <div className="form_blk">

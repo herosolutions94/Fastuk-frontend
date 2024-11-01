@@ -1,6 +1,21 @@
 import { useState } from 'react';
+import http from '../../helpers/http';
+import Text from "../../components/text";
 
-export default function Contact() {
+
+export const getServerSideProps = async (context) => {
+  const result = await http
+    .get("contact")
+    .then((response) => response.data)
+    .catch((error) => ({ error: error.message })); // Return a JSON-serializable object
+
+  return { props: { result } };
+};
+
+export default function Contact({result}) {
+  console.log(result)
+  const {content, siteSettings}=result
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -28,37 +43,16 @@ export default function Contact() {
     <section className="contact-form">
       <div className="contain">
         <div className="content_center">
-          <div className="title">CONTACT</div>
-          <h2>Let’s Start a Conversation</h2>
+          <Text string = {content.description1} />
         </div>
         <div className="flex">
           <div className="col col1">
-            <h3>Ask How can We Help You</h3>
-            <ul className="info-listing">
-              <li>
-                <div className="data">
-                  <h5>Seek our platform in action</h5>
-                  <p>Our company provides a full range of services for the construction of private houses and cottages since 199</p>
-                </div>
-              </li>
-              <li>
-                <div className="data">
-                  <h5>Seek our platform in action</h5>
-                  <p>Our company provides a full range of services for the construction of private houses and cottages since 199</p>
-                </div>
-              </li>
-              <li>
-                <div className="data">
-                  <h5>Seek our platform in action</h5>
-                  <p>Our company provides a full range of services for the construction of private houses and cottages since 199</p>
-                </div>
-              </li>
-            </ul>
+          <Text string ={content.description2} />
           </div>
           <div className="col col2">
             <div className="inner">
               <div className="sec_heading">
-                <h3>Let's Start</h3>
+                <h3>{content.heading1}</h3>
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="row">
@@ -149,7 +143,7 @@ export default function Contact() {
                 <img src="/images/pin.svg" alt="Map Location" />
               </div>
               <div className="cntnt">
-                <h5>Address</h5>
+                <h5>{content.sec1_heading_0}</h5>
                 <p>Lorance Road 542B, Tailstoi Town 5248 MT, Country</p>
               </div>
             </div>
@@ -160,7 +154,7 @@ export default function Contact() {
                 <img src="/images/envelope.svg" alt="Email Icon"  />
               </div>
               <div className="cntnt">
-                <h5>Email</h5>
+                <h5>{content.sec1_heading_1}</h5>
                 <a href="mailto:abcinfo@gmail.com">abcinfo@gmail.com</a>
               </div>
             </div>
@@ -171,7 +165,7 @@ export default function Contact() {
                 <img src="/images/Phone.svg" alt="Phone Icon" />
               </div>
               <div className="cntnt">
-                <h5>Phone</h5>
+                <h5>{content.sec1_heading_2}</h5>
                 <a href="tel:(734) 219-86796">(734) 219-86796</a>
               </div>
             </div>
