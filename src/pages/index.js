@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 import Link from "next/link";
 import Testimonials from "../../components/testimonials";
 import http from "../../helpers/http";
 import Text from "../../components/text";
 import { cmsFileUrl } from "../../helpers/helpers";
+
 
 
 export const getServerSideProps = async (context) => {
@@ -20,6 +23,15 @@ export const getServerSideProps = async (context) => {
 export default function Home({result}) {
   console.log(result)
   const {content, testimonials, siteSettings}=result
+  const router = useRouter();
+  
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = (data) => {
+    // Construct URL query string with form data
+    const queryParams = new URLSearchParams(data).toString();
+    router.push(`/multistepform?${queryParams}`);
+  };
   const data = content
   ? [
     { number: content.sec1_number_0, heading: content.sec1_heading_0, image: content.sec1_image_0  },
@@ -72,8 +84,8 @@ export default function Home({result}) {
                     </button>
                   </div>
                   <div className="tab_content">
-                    <form>
-                      <div className="flex_input">
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="flex_input">
                         <div className="field_col">
                           <label for="location">From:</label>
                           <input
@@ -81,7 +93,9 @@ export default function Home({result}) {
                             name=""
                             placeholder="Manchester"
                             class="input"
+                            {...register("from", { required: "From location is required" })}
                           />
+                          {errors.from && <p className="error">{errors.from.message}</p>}
                         </div>
                         <div className="field_col">
                           <label for="location">To:</label>
@@ -90,7 +104,10 @@ export default function Home({result}) {
                             name=""
                             placeholder="Birmingham"
                             class="input"
+                            {...register("to", { required: "To location is required" })}
                           />
+                          {errors.to && <p className="error">{errors.to.message}</p>}
+                          
                         </div>
                         <div className="field_col">
                           <label for="location">Date:</label>
@@ -99,7 +116,10 @@ export default function Home({result}) {
                             name=""
                             placeholder="Enter Date"
                             class="input"
-                          />
+                            {...register("date", { required: "Date is required" })}
+                            />
+                            {errors.date && <p className="error">{errors.date.message}</p>}
+                         
                         </div>
                         <button type="submit" class="site_btn">
                           <img src="/images/search.svg" />
@@ -134,9 +154,7 @@ export default function Home({result}) {
                   </div>
                 </div>
               </div>
-                        ))}
-
-              
+            ))} 
             </div>
           </div>
         </section>
